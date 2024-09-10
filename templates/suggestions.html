@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Suggestions</title>
+</head>
+<body>
+    <h1>Resume Suggestions</h1>
+
+    <h2>Your Resume Details:</h2>
+    <p><strong>Name:</strong> {{ resume_data['name'] }}</p>
+    <p><strong>Email:</strong> {{ resume_data['email'] }}</p>
+    <p><strong>Phone:</strong> {{ resume_data['phone'] }}</p>
+    <p><strong>Summary:</strong> {{ resume_data['summary'] }}</p>
+    <p><strong>Skills:</strong> {{ resume_data['skills'] }}</p>
+    <p><strong>Experience:</strong> {{ resume_data['experience'] }}</p>
+
+    <h2>Suggestions for Improvement:</h2>
+    <ul>
+        {% for suggestion in suggestions %}
+            <li>{{ suggestion }}</li>
+        {% endfor %}
+    </ul>
+
+    <form action="/download_docx" method="POST">
+        <input type="hidden" name="name" value="{{ resume_data['name'] }}">
+        <input type="hidden" name="email" value="{{ resume_data['email'] }}">
+        <input type="hidden" name="phone" value="{{ resume_data['phone'] }}">
+        <input type="hidden" name="summary" value="{{ resume_data['summary'] }}">
+        <input type="hidden" name="skills" value="{{ resume_data['skills'] }}">
+        <input type="hidden" name="experience" value="{{ resume_data['experience'] }}">
+        <button type="submit">Download PDF</button>
+    </form>
+</body>
+</html>

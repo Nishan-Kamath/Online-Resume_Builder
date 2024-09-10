@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Resume Builder</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        function addSkill() {
+            let skillInput = document.getElementById('skillInput').value;
+            if (skillInput.trim() !== "") {
+                let skillList = document.getElementById('skillsList');
+                let listItem = document.createElement('li');
+                listItem.textContent = skillInput;
+                listItem.innerHTML += ` <button type="button" onclick="removeSkill(this)">Remove</button>`;
+                skillList.appendChild(listItem);
+
+                // Add hidden input to send to backend
+                let skillField = document.createElement('input');
+                skillField.type = 'hidden';
+                skillField.name = 'skills[]';
+                skillField.value = skillInput;
+                document.getElementById('skillForm').appendChild(skillField);
+
+                document.getElementById('skillInput').value = ''; // Clear input
+            }
+        }
+
+        function removeSkill(button) {
+            let listItem = button.parentNode;
+            let skillValue = listItem.textContent.replace(" Remove", "");
+
+            // Remove hidden input
+            let inputs = document.getElementsByName('skills[]');
+            for (let i = 0; i < inputs.length; i++) {
+                if (inputs[i].value === skillValue) {
+                    inputs[i].remove();
+                    break;
+                }
+            }
+
+            listItem.remove(); // Remove skill from list
+        }
+    </script>
+</head>
+<body>
+    <h1>AI-Powered Resume Builder</h1>
+    <form id="skillForm" action="/submit" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br>
+
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone" name="phone" required><br>
+
+        <label for="summary">Professional Summary:</label><br>
+        <textarea id="summary" name="summary" required></textarea><br>
+
+        <label for="skills">Skills:</label><br>
+        <input type="text" id="skillInput" placeholder="Enter skill" />
+        <button type="button" onclick="addSkill()">Add Skill</button><br>
+
+        <ul id="skillsList"></ul>
+
+        <label for="experience">Experience:</label><br>
+        <textarea id="experience" name="experience" required></textarea><br>
+
+        <button type="submit">Submit Resume</button>
+    </form>
+    <form action="{{ url_for('download_docx') }}" method="POST"></form>
+        <button type="submit">Download Resume as DOCX</button>
+    </form>
+</body>
+</html>
